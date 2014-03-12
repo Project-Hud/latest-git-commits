@@ -6,6 +6,7 @@
 var express = require('express')
   , http = require('http')
   , path = require('path')
+  , getCommits = require('./lib/get-commits')
   , app = express()
 
 // all environments
@@ -26,7 +27,13 @@ if ('development' === app.get('env')) {
 }
 
 app.get('/', function (req, res) {
-  res.render('index', { title: 'Express' })
+  res.render('index', {title: 'Latest Commits' })
+})
+
+app.get('/latest-commits', function (req, res) {
+  getCommits(function (err, commits) {
+    res.json(commits)
+  })
 })
 
 http.createServer(app).listen(app.get('port'), function(){
